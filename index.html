@@ -11,8 +11,8 @@
             max-width: 700px;
             margin: 40px auto;
             padding: 20px;
-            background-color: #0f172a; /* Deep dark navy background */
-            color: #f3f4f6; /* Off-white text */
+            background-color: #0f172a;
+            color: #f3f4f6;
         }
         
         .header-container {
@@ -25,7 +25,7 @@
         }
 
         .brand-badge {
-            background-color: #f59e0b; /* Amber yellow */
+            background-color: #f59e0b;
             color: #0f172a;
             padding: 6px 14px;
             border-radius: 6px;
@@ -42,7 +42,7 @@
         }
 
         .card {
-            background-color: #1e293b; /* Slate dark card body */
+            background-color: #1e293b;
             padding: 25px;
             border-radius: 8px;
             border: 1px solid #334155;
@@ -54,7 +54,7 @@
             font-size: 14px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            color: #f59e0b; /* Accent highlight yellow */
+            color: #f59e0b;
             margin-bottom: 15px;
             font-weight: 600;
         }
@@ -77,13 +77,13 @@
         }
 
         input[type="text"]:focus {
-            border-color: #f59e0b; /* Yellow focus ring */
+            border-color: #f59e0b;
         }
 
         button {
             padding: 12px 28px;
             font-size: 15px;
-            background-color: #f59e0b; /* Theme amber yellow button */
+            background-color: #f59e0b;
             color: #0f172a;
             border: none;
             border-radius: 6px;
@@ -105,14 +105,14 @@
 
         .result-card {
             display: none;
-            border-left: 4px solid #f59e0b; /* Left accent line matching script tool */
+            border-left: 4px solid #f59e0b;
         }
 
         .result-grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 2px;
-            background-color: #334155; /* Grid border line effect */
+            background-color: #334155;
             border-radius: 6px;
             overflow: hidden;
             border: 1px solid #334155;
@@ -128,11 +128,11 @@
         }
 
         .result-item:nth-child(even) {
-            background-color: #161e2e; /* Alternate subtle dark rows */
+            background-color: #161e2e;
         }
 
         .result-item strong {
-            color: #94a3b8; /* Muted gray labels */
+            color: #94a3b8;
             font-weight: 500;
         }
 
@@ -141,7 +141,6 @@
             color: #ffffff;
         }
 
-        /* Status Banner notifications */
         .status {
             font-weight: 500;
             margin-bottom: 20px;
@@ -189,10 +188,11 @@
         <div class="result-grid">
             <div class="result-item"><strong>First Name:</strong> <span id="resFirstName"></span></div>
             <div class="result-item"><strong>Last Name:</strong> <span id="resLastName"></span></div>
-            <div class="result-item"><strong>Zip Code:</strong> <span id="resZip"></span></div>
-            <div class="result-item"><strong>State:</strong> <span id="resState"></span></div>
             <div class="result-item"><strong>Date of Birth:</strong> <span id="resDob"></span></div>
+            <div class="result-item"><strong>State:</strong> <span id="resState"></span></div>
+            <div class="result-item"><strong>Zip Code:</strong> <span id="resZip"></span></div>
             <div class="result-item"><strong>Email Address:</strong> <span id="resEmail"></span></div>
+            <div class="result-item"><strong>Coverage Type:</strong> <span id="resCoverage"></span></div>
         </div>
     </div>
 
@@ -200,7 +200,6 @@
         let customerData = [];
         const csvFileName = 'customers.csv'; 
 
-        // Live automatic sync engine
         window.addEventListener('DOMContentLoaded', () => {
             fetch(csvFileName)
                 .then(response => {
@@ -271,12 +270,14 @@
             const customer = customerData.find(c => c.cleanPhone === phoneQuery);
 
             if (customer) {
+                // Mapped precisely to your real CSV column headers from GitHub
                 document.getElementById('resFirstName').textContent = customer['firstName'] || 'N/A';
                 document.getElementById('resLastName').textContent = customer['lastName'] || 'N/A';
-                document.getElementById('resZip').textContent = customer['zipcode'] || 'N/A';
-                document.getElementById('resState').textContent = customer['state'] || 'N/A';
                 document.getElementById('resDob').textContent = customer['Date of Birth'] || 'N/A';
+                document.getElementById('resState').textContent = customer['state'] || 'N/A';
+                document.getElementById('resZip').textContent = customer['zipcode'] || 'N/A';
                 document.getElementById('resEmail').textContent = customer['email'] || 'N/A';
+                document.getElementById('resCoverage').textContent = customer['coverageType'] || 'N/A';
 
                 card.style.display = 'block';
             } else {
