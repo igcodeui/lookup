@@ -3,135 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent Customer Lookup</title>
+    <title>FE Portal - Customer Lookup</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 650px;
+            font-family: 'Poppins', sans-serif;
+            max-width: 700px;
             margin: 40px auto;
             padding: 20px;
-            background-color: #f4f7f6;
-            color: #333;
+            background-color: #0f172a; /* Deep dark navy background */
+            color: #f3f4f6; /* Off-white text */
         }
-        h2 {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 5px;
-        }
-        .subtitle {
-            text-align: center;
-            color: #7f8c8d;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
-        }
-        .search-box {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 12px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        button {
-            padding: 12px 24px;
-            font-size: 16px;
-            background-color: #2ecc71;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #27ae60;
-        }
-        button:disabled, input:disabled {
-            background-color: #f2f2f2;
-            color: #aaa;
-            cursor: not-allowed;
-        }
-        .result-card {
-            display: none;
-            border-left: 5px solid #3498db;
-        }
-        .result-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 16px;
+        
+        .header-container {
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid #1e293b;
+            padding-bottom: 15px;
         }
-        .result-item:last-child {
-            border-bottom: none;
+
+        .brand-badge {
+            background-color: #f59e0b; /* Amber yellow */
+            color: #0f172a;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
         }
-        .result-item strong {
-            color: #7f8c8d;
+
+        h2 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 22px;
+            font-weight: 600;
         }
-        .result-item span {
-            font-weight: 500;
-            color: #2c3e50;
+
+        .card {
+            background-color: #1e293b; /* Slate dark card body */
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
         }
-        .status {
-            font-weight: bold;
+
+        .card-title {
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #f59e0b; /* Accent highlight yellow */
             margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 12px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            font-size: 15px;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 6px;
+            color: #ffffff;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: #f59e0b; /* Yellow focus ring */
+        }
+
+        button {
+            padding: 12px 28px;
+            font-size: 15px;
+            background-color: #f59e0b; /* Theme amber yellow button */
+            color: #0f172a;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #d97706;
+        }
+
+        button:disabled, input:disabled {
+            background-color: #1e293b;
+            border-color: #334155;
+            color: #64748b;
+            cursor: not-allowed;
+        }
+
+        .result-card {
+            display: none;
+            border-left: 4px solid #f59e0b; /* Left accent line matching script tool */
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+            background-color: #334155; /* Grid border line effect */
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .result-item {
+            padding: 14px 18px;
+            background-color: #1e293b;
+            font-size: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .result-item:nth-child(even) {
+            background-color: #161e2e; /* Alternate subtle dark rows */
+        }
+
+        .result-item strong {
+            color: #94a3b8; /* Muted gray labels */
+            font-weight: 500;
+        }
+
+        .result-item span {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        /* Status Banner notifications */
+        .status {
+            font-weight: 500;
+            margin-bottom: 20px;
             text-align: center;
             font-size: 14px;
+            padding: 12px;
+            border-radius: 6px;
         }
-        .error { color: #e74c3c; }
-        .success { color: #27ae60; }
-        .loading { color: #3498db; }
+        .loading { 
+            background-color: rgba(245, 158, 11, 0.1); 
+            color: #f59e0b; 
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        .error { 
+            background-color: rgba(239, 68, 68, 0.1); 
+            color: #ef4444; 
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+        .success { 
+            background-color: rgba(16, 185, 129, 0.1); 
+            color: #10b981; 
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
     </style>
 </head>
 <body>
 
-    <h2>Customer Lookup System</h2>
-    <div class="subtitle">Internal Agent Tool</div>
+    <div class="header-container">
+        <h2>Customer Lookup System</h2>
+        <div class="brand-badge">FE Portal</div>
+    </div>
 
-    <div id="statusMessage" class="status loading">🔄 Connecting to database, please wait...</div>
+    <div id="statusMessage" class="status loading">🔄 Syncing with customer core database...</div>
 
     <div class="card">
-        <label for="phoneInput"><strong>Enter Customer Phone Number</strong></label>
+        <div class="card-title">Live Agent Verification Panel</div>
         <form onsubmit="event.preventDefault(); searchCustomer();" class="search-box">
-            <input type="text" id="phoneInput" placeholder="e.g. 8506586139 or 850-658-6139" disabled>
+            <input type="text" id="phoneInput" placeholder="Enter customer phone number..." disabled>
             <button id="searchBtn" type="submit" disabled>Search</button>
         </form>
     </div>
 
     <div id="resultCard" class="card result-card">
-        <h3 style="margin-top:0; color: #2c3e50; padding-bottom: 8px; border-bottom: 2px solid #3498db;">Customer Details</h3>
-        <div class="result-item"><strong>First Name:</strong> <span id="resFirstName"></span></div>
-        <div class="result-item"><strong>Last Name:</strong> <span id="resLastName"></span></div>
-        <div class="result-item"><strong>Address:</strong> <span id="resAddress"></span></div>
-        <div class="result-item"><strong>City:</strong> <span id="resCity"></span></div>
-        <div class="result-item"><strong>State:</strong> <span id="resState"></span></div>
-        <div class="result-item"><strong>Zip:</strong> <span id="resZip"></span></div>
-        <div class="result-item"><strong>Email:</strong> <span id="resEmail"></span></div>
-        <div class="result-item"><strong>DOB:</strong> <span id="resDob"></span></div>
+        <div class="card-title" style="margin-bottom: 18px;">Verified Account Profile</div>
+        <div class="result-grid">
+            <div class="result-item"><strong>First Name:</strong> <span id="resFirstName"></span></div>
+            <div class="result-item"><strong>Last Name:</strong> <span id="resLastName"></span></div>
+            <div class="result-item"><strong>Zip Code:</strong> <span id="resZip"></span></div>
+            <div class="result-item"><strong>State:</strong> <span id="resState"></span></div>
+            <div class="result-item"><strong>Date of Birth:</strong> <span id="resDob"></span></div>
+            <div class="result-item"><strong>Email Address:</strong> <span id="resEmail"></span></div>
+        </div>
     </div>
 
     <script>
         let customerData = [];
-        
-        // This targets the CSV file sitting in your GitHub repo right next to this HTML file
         const csvFileName = 'customers.csv'; 
 
-        // Automatically load the CSV as soon as the page opens
+        // Live automatic sync engine
         window.addEventListener('DOMContentLoaded', () => {
             fetch(csvFileName)
                 .then(response => {
                     if (!response.ok) {
-                        throw new Error(`Could not find ${csvFileName} in your repository.`);
+                        throw new Error(`Could not seamlessly pull ${csvFileName} database layout.`);
                     }
                     return response.text();
                 })
@@ -141,11 +215,10 @@
                 .catch(err => {
                     const statusDiv = document.getElementById('statusMessage');
                     statusDiv.className = "status error";
-                    statusDiv.textContent = "⚠️ Database Error: " + err.message;
+                    statusDiv.textContent = "⚠️ Core Connection Error: " + err.message;
                 });
         });
 
-        // Parse CSV text matching your Excel spreadsheet columns
         function parseCSV(text) {
             const statusDiv = document.getElementById('statusMessage');
             const phoneInput = document.getElementById('phoneInput');
@@ -154,12 +227,10 @@
             try {
                 const rows = text.split(/\r?\n/).filter(row => row.trim() !== "");
                 if (rows.length < 2) {
-                    throw new Error("The database file seems empty.");
+                    throw new Error("Active database registry contains no rows.");
                 }
 
-                // Grab headers exactly as they appear in your sheet (Fname, Lname, Phone, etc.)
                 const headers = rows[0].split(',').map(h => h.trim());
-
                 customerData = [];
 
                 for (let i = 1; i < rows.length; i++) {
@@ -170,28 +241,26 @@
                         rowObject[header] = columns[index] || '';
                     });
 
-                    if (rowObject['Phone']) {
-                        rowObject.cleanPhone = rowObject['Phone'].replace(/\D/g, '');
+                    if (rowObject['phone']) {
+                        rowObject.cleanPhone = rowObject['phone'].replace(/\D/g, '');
                     }
 
                     customerData.push(rowObject);
                 }
 
                 statusDiv.className = "status success";
-                statusDiv.textContent = `🟢 Database connected. ${customerData.length} records active.`;
+                statusDiv.textContent = `🟢 Database synced. ${customerData.length} active client profiles verified.`;
                 
-                // Unlock input so agents can begin searching
                 phoneInput.disabled = false;
                 phoneInput.focus();
                 searchBtn.disabled = false;
 
             } catch (err) {
                 statusDiv.className = "status error";
-                statusDiv.textContent = "⚠️ Parsing Error: " + err.message;
+                statusDiv.textContent = "⚠️ Runtime Parse Error: " + err.message;
             }
         }
 
-        // Search engine logic
         function searchCustomer() {
             const rawInput = document.getElementById('phoneInput').value;
             const phoneQuery = rawInput.replace(/\D/g, ''); 
@@ -202,19 +271,17 @@
             const customer = customerData.find(c => c.cleanPhone === phoneQuery);
 
             if (customer) {
-                document.getElementById('resFirstName').textContent = customer['Fname'] || 'N/A';
-                document.getElementById('resLastName').textContent = customer['Lname'] || 'N/A';
-                document.getElementById('resAddress').textContent = customer['Address'] || 'N/A';
-                document.getElementById('resCity').textContent = customer['City'] || 'N/A';
-                document.getElementById('resState').textContent = customer['State'] || 'N/A';
-                document.getElementById('resZip').textContent = customer['Zip'] || 'N/A';
-                document.getElementById('resEmail').textContent = customer['Email'] || 'N/A';
-                document.getElementById('resDob').textContent = customer['DOB'] || 'N/A';
+                document.getElementById('resFirstName').textContent = customer['firstName'] || 'N/A';
+                document.getElementById('resLastName').textContent = customer['lastName'] || 'N/A';
+                document.getElementById('resZip').textContent = customer['zipcode'] || 'N/A';
+                document.getElementById('resState').textContent = customer['state'] || 'N/A';
+                document.getElementById('resDob').textContent = customer['Date of Birth'] || 'N/A';
+                document.getElementById('resEmail').textContent = customer['email'] || 'N/A';
 
                 card.style.display = 'block';
             } else {
                 card.style.display = 'none';
-                alert("No customer record found for that number.");
+                alert("No active client profile matching this entry was recovered.");
             }
         }
     </script>
