@@ -218,22 +218,46 @@
                 });
         });
 
+        // Advanced regex-based CSV splitter to handle complex rows cleanly
+        function splitCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
         function parseCSV(text) {
             const statusDiv = document.getElementById('statusMessage');
             const phoneInput = document.getElementById('phoneInput');
             const searchBtn = document.getElementById('searchBtn');
 
             try {
-                const rows = text.split(/\r?\n/).filter(row => row.trim() !== "");
+                // Handle mixed row endings (\r\n vs \n) smoothly
+                const rows = text.split(/\r?\n/);
                 if (rows.length < 2) {
                     throw new Error("Active database registry contains no rows.");
                 }
 
-                const headers = rows[0].split(',').map(h => h.trim());
+                const headers = splitCSVLine(rows[0]);
                 customerData = [];
 
                 for (let i = 1; i < rows.length; i++) {
-                    const columns = rows[i].split(',').map(c => c.trim());
+                    if (!rows[i].trim()) continue; // Skip completely blank lines
+                    
+                    const columns = splitCSVLine(rows[i]);
                     let rowObject = {};
                     
                     headers.forEach((header, index) => {
@@ -242,9 +266,8 @@
 
                     if (rowObject['phone']) {
                         rowObject.cleanPhone = rowObject['phone'].replace(/\D/g, '');
+                        customerData.push(rowObject);
                     }
-
-                    customerData.push(rowObject);
                 }
 
                 statusDiv.className = "status success";
@@ -270,7 +293,6 @@
             const customer = customerData.find(c => c.cleanPhone === phoneQuery);
 
             if (customer) {
-                // Mapped precisely to your real CSV column headers from GitHub
                 document.getElementById('resFirstName').textContent = customer['firstName'] || 'N/A';
                 document.getElementById('resLastName').textContent = customer['lastName'] || 'N/A';
                 document.getElementById('resDob').textContent = customer['Date of Birth'] || 'N/A';
