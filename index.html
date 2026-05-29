@@ -188,12 +188,11 @@
         <div class="result-grid">
             <div class="result-item"><strong>First Name:</strong> <span id="resFirstName"></span></div>
             <div class="result-item"><strong>Last Name:</strong> <span id="resLastName"></span></div>
-            <div class="result-item"><strong>Address:</strong> <span id="resAddress"></span></div>
-            <div class="result-item"><strong>City:</strong> <span id="resCity"></span></div>
+            <div class="result-item"><strong>Date of Birth:</strong> <span id="resDob"></span></div>
             <div class="result-item"><strong>State:</strong> <span id="resState"></span></div>
             <div class="result-item"><strong>Zip Code:</strong> <span id="resZip"></span></div>
-            <div class="result-item"><strong>Date of Birth:</strong> <span id="resDob"></span></div>
             <div class="result-item"><strong>Email Address:</strong> <span id="resEmail"></span></div>
+            <div class="result-item"><strong>Coverage Type:</strong> <span id="resCoverage"></span></div>
         </div>
     </div>
 
@@ -219,7 +218,7 @@
                 });
         });
 
-        // Advanced parser to safely read columns containing spaces and commas
+        // Advanced regex-based CSV splitter to handle complex rows cleanly
         function splitCSVLine(line) {
             const result = [];
             let current = '';
@@ -246,6 +245,7 @@
             const searchBtn = document.getElementById('searchBtn');
 
             try {
+                // Handle mixed row endings (\r\n vs \n) smoothly
                 const rows = text.split(/\r?\n/);
                 if (rows.length < 2) {
                     throw new Error("Active database registry contains no rows.");
@@ -255,7 +255,7 @@
                 customerData = [];
 
                 for (let i = 1; i < rows.length; i++) {
-                    if (!rows[i].trim()) continue; 
+                    if (!rows[i].trim()) continue; // Skip completely blank lines
                     
                     const columns = splitCSVLine(rows[i]);
                     let rowObject = {};
@@ -264,9 +264,8 @@
                         rowObject[header] = columns[index] || '';
                     });
 
-                    // Targets the exact capitalization 'Phone' in your new file
-                    if (rowObject['Phone']) {
-                        rowObject.cleanPhone = rowObject['Phone'].replace(/\D/g, '');
+                    if (rowObject['phone']) {
+                        rowObject.cleanPhone = rowObject['phone'].replace(/\D/g, '');
                         customerData.push(rowObject);
                     }
                 }
@@ -294,15 +293,13 @@
             const customer = customerData.find(c => c.cleanPhone === phoneQuery);
 
             if (customer) {
-                // Mapping keys directly to your new dataset headers
-                document.getElementById('resFirstName').textContent = customer['Fname'] || 'N/A';
-                document.getElementById('resLastName').textContent = customer['Lname'] || 'N/A';
-                document.getElementById('resAddress').textContent = customer['Address'] || 'N/A';
-                document.getElementById('resCity').textContent = customer['City'] || 'N/A';
-                document.getElementById('resState').textContent = customer['State'] || 'N/A';
-                document.getElementById('resZip').textContent = customer['Zip'] || 'N/A';
-                document.getElementById('resDob').textContent = customer['DOB'] || 'N/A';
-                document.getElementById('resEmail').textContent = customer['Email'] || 'N/A';
+                document.getElementById('resFirstName').textContent = customer['firstName'] || 'N/A';
+                document.getElementById('resLastName').textContent = customer['lastName'] || 'N/A';
+                document.getElementById('resDob').textContent = customer['Date of Birth'] || 'N/A';
+                document.getElementById('resState').textContent = customer['state'] || 'N/A';
+                document.getElementById('resZip').textContent = customer['zipcode'] || 'N/A';
+                document.getElementById('resEmail').textContent = customer['email'] || 'N/A';
+                document.getElementById('resCoverage').textContent = customer['coverageType'] || 'N/A';
 
                 card.style.display = 'block';
             } else {
